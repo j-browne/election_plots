@@ -1,0 +1,24 @@
+all: 2016_pa_congressional_elections.svg 2016_pa_congressional_elections.png 2016_combined.png 2018_pa_congressional_elections.svg 2018_pa_congressional_elections.png 2018_combined.png
+
+.PHONY: all clean
+
+clean:
+	rm -f 2016_pa_congressional_elections.svg 2016_pa_congressional_elections.png 2016_combined.png 2018_pa_congressional_elections.svg 2018_pa_congressional_elections.png 2018_combined.png
+
+2016_pa_congressional_elections.svg: 2016_pa_congressional_elections.gpi 2016_pa_congressional_elections.txt
+	gnuplot 2016_pa_congressional_elections.gpi
+
+2016_pa_congressional_elections.png: 2016_pa_congressional_elections.svg
+	convert 2016_pa_congressional_elections.svg 2016_pa_congressional_elections.png
+
+2016_combined.png: 2016_pa_congressional_elections.svg 2016_pa_congressional_districts.png
+	convert 2016_pa_congressional_elections.svg 2016_pa_congressional_districts.png -resize 1920x1080\> -gravity center -append 2016_combined.png
+
+2018_pa_congressional_elections.svg: 2018_pa_congressional_elections.gpi 2018_pa_congressional_elections.txt
+	gnuplot 2018_pa_congressional_elections.gpi
+
+2018_pa_congressional_elections.png: 2018_pa_congressional_elections.svg
+	convert 2018_pa_congressional_elections.svg 2018_pa_congressional_elections.png
+
+2018_combined.png: 2018_pa_congressional_elections.svg 2018_pa_congressional_districts.png
+	convert 2018_pa_congressional_elections.svg 2018_pa_congressional_districts.png -resize 1920x1080\> -gravity center -append 2018_combined.png

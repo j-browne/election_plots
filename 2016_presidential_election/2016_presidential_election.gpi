@@ -1,0 +1,131 @@
+set term svg size 1920,1080 enhanced font ",20"
+set output "2016_presidential_election.svg"
+
+data="2016_presidential_election.txt"
+sum_pop=138261109
+sum_ec=538
+
+set macros
+D_POP="rgb \"#3333FF\""
+R_POP="rgb \"#E81B23\""
+L_POP="rgb \"#FED105\""
+G_POP="rgb \"#00A95C\""
+O_POP="rgb \"#777777\""
+D_EC ="rgb \"#8585FF\""
+R_EC ="rgb \"#F1767B\""
+L_EC ="rgb \"#FEE369\""
+G_EC ="rgb \"#66CB9D\""
+O_EC ="rgb \"#ADADAD\""
+
+set style data histograms
+set style histogram rowstacked
+set boxwidth 0.4
+
+set style fill solid 1.0 noborder
+set format x2 ""
+set grid noxtics x2tics ytics
+set xtics 0,1 in font ",12" nomirror offset 0,0.5
+set x2tics 0,1 in nomirror
+set ytics 0,1 out nomirror
+set y2tics 0,10 out nomirror
+set mytics 10
+set my2tics 10
+
+set title "2016 Presidential Election"
+set ylabel "Percentage of vote"
+unset xlabel
+set xrange [0:52]
+set x2range [0:52]
+set yrange [0:12]
+set y2range [0:120]
+
+set arrow from 51, graph 0 to 51, graph 1 nohead
+
+
+# Make a custom legend
+unset key
+KEY_XMIN=0.78
+KEY_XEND=0.96
+KEY_XSPACING=0.06
+KEY_XMARGIN=0.01
+KEY_YEND=0.95
+KEY_YSPACING=0.025
+KEY_YMARGIN=0.015
+
+set object rect \
+  from graph (KEY_XMIN), (KEY_YEND - 6.5 * KEY_YSPACING - KEY_YMARGIN) \
+  to   graph (KEY_XEND + KEY_XMARGIN), (KEY_YEND + 0.5 * KEY_YSPACING + KEY_YMARGIN)
+set object rect \
+  from graph (KEY_XEND - 2.0 * KEY_XSPACING), (KEY_YEND - 2.5 * KEY_YSPACING) \
+  to   graph (KEY_XEND - 1.0 * KEY_XSPACING), (KEY_YEND - 1.5 * KEY_YSPACING) \
+  fs noborder fc @D_POP 
+set object rect \
+  from graph (KEY_XEND - 2.0 * KEY_XSPACING), (KEY_YEND - 3.5 * KEY_YSPACING) \
+  to   graph (KEY_XEND - 1.0 * KEY_XSPACING), (KEY_YEND - 2.5 * KEY_YSPACING) \
+  fs noborder fc @R_POP 
+set object rect \
+  from graph (KEY_XEND - 2.0 * KEY_XSPACING), (KEY_YEND - 4.5 * KEY_YSPACING) \
+  to   graph (KEY_XEND - 1.0 * KEY_XSPACING), (KEY_YEND - 3.5 * KEY_YSPACING) \
+  fs noborder fc @L_POP 
+set object rect \
+  from graph (KEY_XEND - 2.0 * KEY_XSPACING), (KEY_YEND - 5.5 * KEY_YSPACING) \
+  to   graph (KEY_XEND - 1.0 * KEY_XSPACING), (KEY_YEND - 4.5 * KEY_YSPACING) \
+  fs noborder fc @G_POP 
+set object rect \
+  from graph (KEY_XEND - 2.0 * KEY_XSPACING), (KEY_YEND - 6.5 * KEY_YSPACING) \
+  to   graph (KEY_XEND - 1.0 * KEY_XSPACING), (KEY_YEND - 5.5 * KEY_YSPACING) \
+  fs noborder fc @O_POP 
+set object rect \
+  from graph (KEY_XEND - 1.0 * KEY_XSPACING), (KEY_YEND - 2.5 * KEY_YSPACING) \
+  to   graph (KEY_XEND - 0.0 * KEY_XSPACING), (KEY_YEND - 1.5 * KEY_YSPACING) \
+  fs noborder fc @D_EC 
+set object rect \
+  from graph (KEY_XEND - 1.0 * KEY_XSPACING), (KEY_YEND - 3.5 * KEY_YSPACING) \
+  to   graph (KEY_XEND - 0.0 * KEY_XSPACING), (KEY_YEND - 2.5 * KEY_YSPACING) \
+  fs noborder fc @R_EC 
+set object rect \
+  from graph (KEY_XEND - 1.0 * KEY_XSPACING), (KEY_YEND - 4.5 * KEY_YSPACING) \
+  to   graph (KEY_XEND - 0.0 * KEY_XSPACING), (KEY_YEND - 3.5 * KEY_YSPACING) \
+  fs noborder fc @L_EC 
+set object rect \
+  from graph (KEY_XEND - 1.0 * KEY_XSPACING), (KEY_YEND - 5.5 * KEY_YSPACING) \
+  to   graph (KEY_XEND - 0.0 * KEY_XSPACING), (KEY_YEND - 4.5 * KEY_YSPACING) \
+  fs noborder fc @G_EC 
+set object rect \
+  from graph (KEY_XEND - 1.0 * KEY_XSPACING), (KEY_YEND - 6.5 * KEY_YSPACING) \
+  to   graph (KEY_XEND - 0.0 * KEY_XSPACING), (KEY_YEND - 5.5 * KEY_YSPACING) \
+  fs noborder fc @O_EC 
+set label "Popular"   at graph (KEY_XEND - 1.5 * KEY_XSPACING), (KEY_YEND - 0 * KEY_YSPACING) center
+set label "Vote"      at graph (KEY_XEND - 1.5 * KEY_XSPACING), (KEY_YEND - 1 * KEY_YSPACING) center
+set label "Electoral" at graph (KEY_XEND - 0.5 * KEY_XSPACING), (KEY_YEND - 0 * KEY_YSPACING) center
+set label "College"   at graph (KEY_XEND - 0.5 * KEY_XSPACING), (KEY_YEND - 1 * KEY_YSPACING) center
+set label "Clinton"   at graph (KEY_XEND - 2.1 * KEY_XSPACING), (KEY_YEND - 2 * KEY_YSPACING) right
+set label "Trump"     at graph (KEY_XEND - 2.1 * KEY_XSPACING), (KEY_YEND - 3 * KEY_YSPACING) right
+set label "Johnson"   at graph (KEY_XEND - 2.1 * KEY_XSPACING), (KEY_YEND - 4 * KEY_YSPACING) right
+set label "Stein"     at graph (KEY_XEND - 2.1 * KEY_XSPACING), (KEY_YEND - 5 * KEY_YSPACING) right
+set label "Other"     at graph (KEY_XEND - 2.1 * KEY_XSPACING), (KEY_YEND - 6 * KEY_YSPACING) right
+
+
+plot data using (     $0 + 0.5):(NaN):xtic(2)                              every :::0::0 axes x1y1 with boxes, \
+     data using (     $0 + 0.3):(($3+$5+$7+$9+$11+$13)  * 100.0 / sum_pop) every :::0::0 axes x1y1 with boxes lc @D_POP, \
+     data using (     $0 + 0.3):((   $5+$7+$9+$11+$13)  * 100.0 / sum_pop) every :::0::0 axes x1y1 with boxes lc @R_POP, \
+     data using (     $0 + 0.3):((      $7+$9+$11+$13)  * 100.0 / sum_pop) every :::0::0 axes x1y1 with boxes lc @L_POP, \
+     data using (     $0 + 0.3):((         $9+$11+$13)  * 100.0 / sum_pop) every :::0::0 axes x1y1 with boxes lc @G_POP, \
+     data using (     $0 + 0.3):((            $11+$13)  * 100.0 / sum_pop) every :::0::0 axes x1y1 with boxes lc @O_POP, \
+     data using (     $0 + 0.7):(($4+$6+$8+$10+$12+$14) * 100.0 / sum_ec)  every :::0::0 axes x1y1 with boxes lc @D_EC, \
+     data using (     $0 + 0.7):((   $6+$8+$10+$12+$14) * 100.0 / sum_ec)  every :::0::0 axes x1y1 with boxes lc @R_EC, \
+     data using (     $0 + 0.7):((      $8+$10+$12+$14) * 100.0 / sum_ec)  every :::0::0 axes x1y1 with boxes lc @L_EC, \
+     data using (     $0 + 0.7):((         $10+$12+$14) * 100.0 / sum_ec)  every :::0::0 axes x1y1 with boxes lc @G_EC, \
+     data using (     $0 + 0.7):((             $12+$14) * 100.0 / sum_ec)  every :::0::0 axes x1y1 with boxes lc @O_EC, \
+     data using (51 + $0 + 0.5):(NaN):xtic(1)                              every :::1::1 axes x1y2 with boxes, \
+     data using (51 + $0 + 0.3):(($3+$5+$7+$9+$11+$13)  * 100.0 / sum_pop) every :::1::1 axes x1y2 with boxes lc @D_POP, \
+     data using (51 + $0 + 0.3):((   $5+$7+$9+$11+$13)  * 100.0 / sum_pop) every :::1::1 axes x1y2 with boxes lc @R_POP, \
+     data using (51 + $0 + 0.3):((      $7+$9+$11+$13)  * 100.0 / sum_pop) every :::1::1 axes x1y2 with boxes lc @L_POP, \
+     data using (51 + $0 + 0.3):((         $9+$11+$13)  * 100.0 / sum_pop) every :::1::1 axes x1y2 with boxes lc @G_POP, \
+     data using (51 + $0 + 0.3):((            $11+$13)  * 100.0 / sum_pop) every :::1::1 axes x1y2 with boxes lc @O_POP, \
+     data using (51 + $0 + 0.7):(($4+$6+$8+$10+$12+$14) * 100.0 / sum_ec)  every :::1::1 axes x1y2 with boxes lc @D_EC, \
+     data using (51 + $0 + 0.7):((   $6+$8+$10+$12+$14) * 100.0 / sum_ec)  every :::1::1 axes x1y2 with boxes lc @R_EC, \
+     data using (51 + $0 + 0.7):((      $8+$10+$12+$14) * 100.0 / sum_ec)  every :::1::1 axes x1y2 with boxes lc @L_EC, \
+     data using (51 + $0 + 0.7):((         $10+$12+$14) * 100.0 / sum_ec)  every :::1::1 axes x1y2 with boxes lc @G_EC, \
+     data using (51 + $0 + 0.7):((             $12+$14) * 100.0 / sum_ec)  every :::1::1 axes x1y2 with boxes lc @O_EC
+

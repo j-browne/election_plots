@@ -1,0 +1,12 @@
+all: 2018_tx_congressional_elections.svg 2018_tx_congressional_elections.png
+
+.PHONY: all clean
+
+clean:
+	rm -f 2018_tx_congressional_elections.svg 2018_tx_congressional_elections.png
+
+2018_tx_congressional_elections.svg: 2018_tx_congressional_elections.gpi 2018_tx_congressional_elections.txt
+	gnuplot 2018_tx_congressional_elections.gpi
+
+2018_tx_congressional_elections.png: 2018_tx_congressional_elections.svg
+	convert 2018_tx_congressional_elections.svg 2018_tx_congressional_elections.png

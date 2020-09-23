@@ -33,7 +33,7 @@ set ylabel "Percentage of vote or representation"
 unset xlabel
 set xrange [0:100]
 set x2range [0:100]
-set yrange [0:5]
+set yrange [0:2]
 set y2range [0:120]
 
 set arrow from 99, graph 0 to 99, graph 1 nohead

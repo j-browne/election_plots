@@ -1,0 +1,111 @@
+set term svg size 1920,1080 enhanced font ",20"
+set output "2020_congressional_elections.svg"
+
+data="2020_congressional_elections.txt"
+sum_pop=76940734+72145239+2199722
+sum_cd=435
+
+set macros
+D_POP="rgb \"#3333FF\""
+R_POP="rgb \"#E81B23\""
+O_POP="rgb \"#777777\""
+D_CD ="rgb \"#8585FF\""
+R_CD ="rgb \"#F1767B\""
+O_CD ="rgb \"#ADADAD\""
+
+set style data histograms
+set style histogram rowstacked
+set boxwidth 0.4
+
+set style fill solid 1.0 noborder
+set format x2 ""
+set grid noxtics x2tics ytics
+set xtics 0,1 in font ",12" nomirror offset 0,0.5
+set x2tics 0,1 in nomirror
+set ytics 0,1 out nomirror
+set y2tics 0,10 out nomirror
+set mytics 10
+set my2tics 10
+
+set title "2020 Congressional Elections"
+set ylabel "Percentage of vote or representation"
+unset xlabel
+set xrange [0:51]
+set x2range [0:51]
+set yrange [0:15]
+set y2range [0:120]
+
+set arrow from 50, graph 0 to 50, graph 1 nohead
+
+
+# Make a custom legend
+#unset key
+#KEY_XMIN=0.78
+#KEY_XEND=0.96
+#KEY_XSPACING=0.06
+#KEY_XMARGIN=0.01
+#KEY_YEND=0.95
+#KEY_YSPACING=0.025
+#KEY_YMARGIN=0.015
+
+# Make a custom legend
+unset key
+KEY_XMIN=0.645
+KEY_XEND=0.925
+KEY_XSPACING=0.1
+KEY_XMARGIN=0.01
+KEY_YEND=0.95
+KEY_YSPACING=0.025
+KEY_YMARGIN=0.015
+
+set object rect \
+  from graph (KEY_XMIN), (KEY_YEND - 4.5 * KEY_YSPACING - KEY_YMARGIN) \
+  to   graph (KEY_XEND + KEY_XMARGIN), (KEY_YEND + 0.5 * KEY_YSPACING + KEY_YMARGIN)
+set object rect \
+  from graph (KEY_XEND - 2.0 * KEY_XSPACING), (KEY_YEND - 2.5 * KEY_YSPACING) \
+  to   graph (KEY_XEND - 1.0 * KEY_XSPACING), (KEY_YEND - 1.5 * KEY_YSPACING) \
+  fs noborder fc @D_POP 
+set object rect \
+  from graph (KEY_XEND - 2.0 * KEY_XSPACING), (KEY_YEND - 3.5 * KEY_YSPACING) \
+  to   graph (KEY_XEND - 1.0 * KEY_XSPACING), (KEY_YEND - 2.5 * KEY_YSPACING) \
+  fs noborder fc @R_POP 
+set object rect \
+  from graph (KEY_XEND - 2.0 * KEY_XSPACING), (KEY_YEND - 4.5 * KEY_YSPACING) \
+  to   graph (KEY_XEND - 1.0 * KEY_XSPACING), (KEY_YEND - 3.5 * KEY_YSPACING) \
+  fs noborder fc @O_POP 
+set object rect \
+  from graph (KEY_XEND - 1.0 * KEY_XSPACING), (KEY_YEND - 2.5 * KEY_YSPACING) \
+  to   graph (KEY_XEND - 0.0 * KEY_XSPACING), (KEY_YEND - 1.5 * KEY_YSPACING) \
+  fs noborder fc @D_CD 
+set object rect \
+  from graph (KEY_XEND - 1.0 * KEY_XSPACING), (KEY_YEND - 3.5 * KEY_YSPACING) \
+  to   graph (KEY_XEND - 0.0 * KEY_XSPACING), (KEY_YEND - 2.5 * KEY_YSPACING) \
+  fs noborder fc @R_CD 
+set object rect \
+  from graph (KEY_XEND - 1.0 * KEY_XSPACING), (KEY_YEND - 4.5 * KEY_YSPACING) \
+  to   graph (KEY_XEND - 0.0 * KEY_XSPACING), (KEY_YEND - 3.5 * KEY_YSPACING) \
+  fs noborder fc @O_CD 
+set label "Popular"        at graph (KEY_XEND - 1.5 * KEY_XSPACING), (KEY_YEND - 0 * KEY_YSPACING) center
+set label "Vote"           at graph (KEY_XEND - 1.5 * KEY_XSPACING), (KEY_YEND - 1 * KEY_YSPACING) center
+set label "Congressional"  at graph (KEY_XEND - 0.5 * KEY_XSPACING), (KEY_YEND - 0 * KEY_YSPACING) center
+set label "Representation" at graph (KEY_XEND - 0.5 * KEY_XSPACING), (KEY_YEND - 1 * KEY_YSPACING) center
+set label "Democratic"     at graph (KEY_XEND - 2.1 * KEY_XSPACING), (KEY_YEND - 2 * KEY_YSPACING) right
+set label "Republican"     at graph (KEY_XEND - 2.1 * KEY_XSPACING), (KEY_YEND - 3 * KEY_YSPACING) right
+set label "Other"          at graph (KEY_XEND - 2.1 * KEY_XSPACING), (KEY_YEND - 4 * KEY_YSPACING) right
+
+
+plot data using (     $0 + 0.5):(NaN):xtic(2)                  every :::0::0 axes x1y1 with boxes, \
+     data using (     $0 + 0.3):(($3+$5+$7) * 100.0 / sum_pop) every :::0::0 axes x1y1 with boxes lc @D_POP, \
+     data using (     $0 + 0.3):((   $5+$7) * 100.0 / sum_pop) every :::0::0 axes x1y1 with boxes lc @R_POP, \
+     data using (     $0 + 0.3):((      $7) * 100.0 / sum_pop) every :::0::0 axes x1y1 with boxes lc @O_POP, \
+     data using (     $0 + 0.7):(($4+$6+$8) * 100.0 / sum_cd)  every :::0::0 axes x1y1 with boxes lc @D_CD, \
+     data using (     $0 + 0.7):((   $6+$8) * 100.0 / sum_cd)  every :::0::0 axes x1y1 with boxes lc @R_CD, \
+     data using (     $0 + 0.7):((      $8) * 100.0 / sum_cd)  every :::0::0 axes x1y1 with boxes lc @O_CD, \
+     data using (50 + $0 + 0.5):(NaN):xtic(1)                  every :::1::1 axes x1y2 with boxes, \
+     data using (50 + $0 + 0.3):(($3+$5+$7) * 100.0 / sum_pop) every :::1::1 axes x1y2 with boxes lc @D_POP, \
+     data using (50 + $0 + 0.3):((   $5+$7) * 100.0 / sum_pop) every :::1::1 axes x1y2 with boxes lc @R_POP, \
+     data using (50 + $0 + 0.3):((      $7) * 100.0 / sum_pop) every :::1::1 axes x1y2 with boxes lc @O_POP, \
+     data using (50 + $0 + 0.7):(($4+$6+$8) * 100.0 / sum_cd)  every :::1::1 axes x1y2 with boxes lc @D_CD, \
+     data using (50 + $0 + 0.7):((   $6+$8) * 100.0 / sum_cd)  every :::1::1 axes x1y2 with boxes lc @R_CD, \
+     data using (50 + $0 + 0.7):((      $8) * 100.0 / sum_cd)  every :::1::1 axes x1y2 with boxes lc @O_CD,
+
